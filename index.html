@@ -356,7 +356,7 @@ footer {
 </div>
 
 <footer>
-  <div class="footer-text">Sean Found Something — field dispatch v1.0</div>
+  <div class="footer-text">What Sean Found — field dispatch v1.0</div>
 </footer>
 
 <script>
@@ -450,7 +450,7 @@ async function sendAlert(e) {
         body: JSON.stringify({
           from: FROM_ADDRESS,
           to: f.email,
-          subject: '🎣 Sean found something',
+          subject: 'Sean found something',
           html: alertHtml(f.name, caption, imageDataUrl),
         }),
       });
@@ -502,7 +502,7 @@ async function subscribe(e) {
       body: JSON.stringify({
         from: FROM_ADDRESS,
         to: email,
-        subject: `You're on the list — Sean Found Something`,
+        subject: `You're on the list — What Sean Found`,
         html: confirmHtml(name || 'Angler'),
       }),
     });
@@ -541,14 +541,14 @@ function alertHtml(name, caption, img) {
 <div class="wrap">
   <div class="hdr">
     <div class="to">For: ${esc(name)}</div>
-    <h1>Sean Found Something</h1>
+    <h1>What Sean Found</h1>
   </div>
   <hr/>
   <div class="body">
     <img src="${img}" alt="catch"/>
     <div class="caption">${esc(caption || 'No notes.')}</div>
   </div>
-  <div class="footer">Sean Found Something — Field Dispatch v1.0</div>
+  <div class="footer">What Sean Found — Field Dispatch v1.0</div>
 </div></body></html>`;
 }
 
@@ -567,7 +567,7 @@ function confirmHtml(name) {
   <div class="hdr"><h1>You're on<br>the list.</h1></div>
   <hr/>
   <div class="body">Hey ${esc(name)} — you'll get a dispatch every time Sean finds or catches something. No spam, just finds.</div>
-  <div class="footer">Sean Found Something — Field Dispatch v1.0</div>
+  <div class="footer">What Sean Found — Field Dispatch v1.0</div>
 </div></body></html>`;
 }
 
