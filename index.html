@@ -4,7 +4,10 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 <title>Sean Found Something</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet"/>
+
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -13,8 +16,8 @@
   --fg:    #e8e6ff;
   --dim:   rgba(232,230,255,0.45);
   --rule:  rgba(232,230,255,0.2);
-  --head:  'Aptos', 'Nunito', sans-serif;
-  --body:  'Aptos', 'Nunito', sans-serif;
+  --head:  'Inter Tight', sans-serif;
+  --body:  'Satoshi', sans-serif;
 }
 
 html, body {
@@ -36,7 +39,7 @@ h1 {
   font-weight: 800;
   line-height: 1.05;
   text-transform: uppercase;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
   color: var(--fg);
 }
 
@@ -129,6 +132,8 @@ textarea {
   padding: 6px 0 12px;
   font-family: var(--body);
   font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
   color: var(--fg);
   resize: none;
   height: 80px;
@@ -150,7 +155,7 @@ textarea:focus { border-bottom-color: var(--fg); }
   font-family: var(--head);
   font-size: 1.1rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
   display: flex;
@@ -223,7 +228,7 @@ textarea:focus { border-bottom-color: var(--fg); }
   line-height: 1.1;
   color: var(--fg);
   margin-bottom: 10px;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
 }
 
 .sub-desc {
@@ -243,6 +248,8 @@ textarea:focus { border-bottom-color: var(--fg); }
   padding: 10px 0 12px;
   font-family: var(--body);
   font-size: 0.88rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
   color: var(--fg);
   outline: none;
   -webkit-appearance: none;
@@ -261,7 +268,7 @@ textarea:focus { border-bottom-color: var(--fg); }
   font-family: var(--head);
   font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
   margin-top: 16px;
@@ -370,7 +377,7 @@ const zone = document.getElementById('upload-zone');
 
 zone.addEventListener('click', () => {
   zone.classList.remove('tapped');
-  void zone.offsetWidth; // reflow to restart animation
+  void zone.offsetWidth;
   zone.classList.add('tapped');
 });
 zone.addEventListener('animationend', () => zone.classList.remove('tapped'));
@@ -386,7 +393,6 @@ document.getElementById('file-input').addEventListener('change', e => {
   if (e.target.files[0]) readFile(e.target.files[0]);
 });
 
-// ── Ripple helper ──────────────────────────
 function addRipple(btn, e) {
   const rect = btn.getBoundingClientRect();
   const size = Math.max(rect.width, rect.height);
@@ -399,7 +405,6 @@ function addRipple(btn, e) {
   ripple.addEventListener('animationend', () => ripple.remove());
 }
 
-// ── Button pop helper ──────────────────────
 function popBtn(btn) {
   btn.classList.remove('pop');
   void btn.offsetWidth;
@@ -526,13 +531,13 @@ function alertHtml(name, caption, img) {
   body{margin:0;padding:0;background:#2b2ef5;font-family:Helvetica,Arial,sans-serif;}
   .wrap{max-width:600px;margin:0 auto;background:#2b2ef5;color:#e8e6ff;}
   .hdr{padding:32px 28px 20px;}
-  .hdr h1{font-size:2.2rem;font-weight:900;text-transform:uppercase;letter-spacing:-0.01em;line-height:1;color:#e8e6ff;margin:0;}
-  .hdr .to{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(232,230,255,0.45);margin-bottom:10px;}
+  .hdr h1{font-family:'Inter Tight',Helvetica,Arial,sans-serif;font-size:2.2rem;font-weight:800;text-transform:uppercase;letter-spacing:-0.01em;line-height:1;color:#e8e6ff;margin:0;}
+  .hdr .to{font-family:'Satoshi',Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(232,230,255,0.45);margin-bottom:10px;}
   hr{border:none;border-top:1px solid rgba(232,230,255,0.2);margin:0 28px;}
-  .body{padding:24px 28px;}
+  .body{padding:24px 28px;font-family:'Satoshi',Helvetica,Arial,sans-serif;}
   img{width:100%;display:block;margin-bottom:18px;}
   .caption{font-size:0.95rem;font-style:italic;color:rgba(232,230,255,0.8);line-height:1.6;margin-bottom:18px;}
-  .footer{padding:14px 28px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(232,230,255,0.3);}
+  .footer{padding:14px 28px;font-family:'Inter Tight',Helvetica,Arial,sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(232,230,255,0.3);}
 </style></head><body>
 <div class="wrap">
   <div class="hdr">
@@ -554,10 +559,10 @@ function confirmHtml(name) {
   body{margin:0;padding:0;background:#2b2ef5;font-family:Helvetica,Arial,sans-serif;}
   .wrap{max-width:600px;margin:0 auto;background:#2b2ef5;color:#e8e6ff;}
   .hdr{padding:32px 28px 20px;}
-  .hdr h1{font-size:2.2rem;font-weight:900;text-transform:uppercase;line-height:1;color:#e8e6ff;margin:0;}
+  .hdr h1{font-family:'Inter Tight',Helvetica,Arial,sans-serif;font-size:2.2rem;font-weight:800;text-transform:uppercase;letter-spacing:-0.01em;line-height:1;color:#e8e6ff;margin:0;}
   hr{border:none;border-top:1px solid rgba(232,230,255,0.2);margin:0 28px;}
-  .body{padding:24px 28px;font-size:0.9rem;font-style:italic;color:rgba(232,230,255,0.7);line-height:1.7;}
-  .footer{padding:14px 28px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(232,230,255,0.3);}
+  .body{padding:24px 28px;font-family:'Satoshi',Helvetica,Arial,sans-serif;font-size:0.9rem;font-style:italic;color:rgba(232,230,255,0.7);line-height:1.7;}
+  .footer{padding:14px 28px;font-family:'Inter Tight',Helvetica,Arial,sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(232,230,255,0.3);}
 </style></head><body>
 <div class="wrap">
   <div class="hdr"><h1>You're on<br>the list.</h1></div>
