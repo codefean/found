@@ -3,21 +3,18 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>What Sean Found</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700;800&display=swap" rel="stylesheet"/>
-<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet"/>
-
+<title>Sean Found Something</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:    #0000e7;
+  --bg:    #2b2ef5;
   --fg:    #e8e6ff;
   --dim:   rgba(232,230,255,0.45);
   --rule:  rgba(232,230,255,0.2);
-  --head:  'Inter Tight', sans-serif;
-  --body:  'Satoshi', sans-serif;
+  --head:  'Aptos', 'Nunito', sans-serif;
+  --body:  'Aptos', 'Nunito', sans-serif;
 }
 
 html, body {
@@ -35,10 +32,11 @@ header {
 
 h1 {
   font-family: var(--head);
-  font-size: clamp(1.3rem, 8vw, 3rem);
+  font-size: clamp(1.8rem, 8vw, 3rem);
   font-weight: 800;
   line-height: 1.05;
-  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
   color: var(--fg);
 }
 
@@ -131,8 +129,6 @@ textarea {
   padding: 6px 0 12px;
   font-family: var(--body);
   font-size: 0.9rem;
-  font-weight: 400;
-  letter-spacing: 0.01em;
   color: var(--fg);
   resize: none;
   height: 80px;
@@ -154,7 +150,7 @@ textarea:focus { border-bottom-color: var(--fg); }
   font-family: var(--head);
   font-size: 1.1rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
   display: flex;
@@ -227,7 +223,7 @@ textarea:focus { border-bottom-color: var(--fg); }
   line-height: 1.1;
   color: var(--fg);
   margin-bottom: 10px;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
 }
 
 .sub-desc {
@@ -247,8 +243,6 @@ textarea:focus { border-bottom-color: var(--fg); }
   padding: 10px 0 12px;
   font-family: var(--body);
   font-size: 0.88rem;
-  font-weight: 400;
-  letter-spacing: 0.01em;
   color: var(--fg);
   outline: none;
   -webkit-appearance: none;
@@ -267,7 +261,7 @@ textarea:focus { border-bottom-color: var(--fg); }
   font-family: var(--head);
   font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
   margin-top: 16px;
@@ -356,7 +350,7 @@ footer {
 </div>
 
 <footer>
-  <div class="footer-text">What Sean Found — field dispatch v1.0</div>
+  <div class="footer-text">Sean Found Something — field dispatch v1.0</div>
 </footer>
 
 <script>
@@ -376,7 +370,7 @@ const zone = document.getElementById('upload-zone');
 
 zone.addEventListener('click', () => {
   zone.classList.remove('tapped');
-  void zone.offsetWidth;
+  void zone.offsetWidth; // reflow to restart animation
   zone.classList.add('tapped');
 });
 zone.addEventListener('animationend', () => zone.classList.remove('tapped'));
@@ -392,6 +386,7 @@ document.getElementById('file-input').addEventListener('change', e => {
   if (e.target.files[0]) readFile(e.target.files[0]);
 });
 
+// ── Ripple helper ──────────────────────────
 function addRipple(btn, e) {
   const rect = btn.getBoundingClientRect();
   const size = Math.max(rect.width, rect.height);
@@ -404,6 +399,7 @@ function addRipple(btn, e) {
   ripple.addEventListener('animationend', () => ripple.remove());
 }
 
+// ── Button pop helper ──────────────────────
 function popBtn(btn) {
   btn.classList.remove('pop');
   void btn.offsetWidth;
@@ -450,7 +446,7 @@ async function sendAlert(e) {
         body: JSON.stringify({
           from: FROM_ADDRESS,
           to: f.email,
-          subject: 'Sean found something',
+          subject: '🎣 Sean found something',
           html: alertHtml(f.name, caption, imageDataUrl),
         }),
       });
@@ -502,7 +498,7 @@ async function subscribe(e) {
       body: JSON.stringify({
         from: FROM_ADDRESS,
         to: email,
-        subject: `You're on the list — What Sean Found`,
+        subject: `You're on the list — Sean Found Something`,
         html: confirmHtml(name || 'Angler'),
       }),
     });
@@ -530,25 +526,25 @@ function alertHtml(name, caption, img) {
   body{margin:0;padding:0;background:#2b2ef5;font-family:Helvetica,Arial,sans-serif;}
   .wrap{max-width:600px;margin:0 auto;background:#2b2ef5;color:#e8e6ff;}
   .hdr{padding:32px 28px 20px;}
-  .hdr h1{font-family:'Inter Tight',Helvetica,Arial,sans-serif;font-size:2.2rem;font-weight:800;text-transform:uppercase;letter-spacing:-0.01em;line-height:1;color:#e8e6ff;margin:0;}
-  .hdr .to{font-family:'Satoshi',Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(232,230,255,0.45);margin-bottom:10px;}
+  .hdr h1{font-size:2.2rem;font-weight:900;text-transform:uppercase;letter-spacing:-0.01em;line-height:1;color:#e8e6ff;margin:0;}
+  .hdr .to{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(232,230,255,0.45);margin-bottom:10px;}
   hr{border:none;border-top:1px solid rgba(232,230,255,0.2);margin:0 28px;}
-  .body{padding:24px 28px;font-family:'Satoshi',Helvetica,Arial,sans-serif;}
+  .body{padding:24px 28px;}
   img{width:100%;display:block;margin-bottom:18px;}
   .caption{font-size:0.95rem;font-style:italic;color:rgba(232,230,255,0.8);line-height:1.6;margin-bottom:18px;}
-  .footer{padding:14px 28px;font-family:'Inter Tight',Helvetica,Arial,sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(232,230,255,0.3);}
+  .footer{padding:14px 28px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(232,230,255,0.3);}
 </style></head><body>
 <div class="wrap">
   <div class="hdr">
     <div class="to">For: ${esc(name)}</div>
-    <h1>What Sean Found</h1>
+    <h1>Sean Found Something</h1>
   </div>
   <hr/>
   <div class="body">
     <img src="${img}" alt="catch"/>
     <div class="caption">${esc(caption || 'No notes.')}</div>
   </div>
-  <div class="footer">What Sean Found — Field Dispatch v1.0</div>
+  <div class="footer">Sean Found Something — Field Dispatch v1.0</div>
 </div></body></html>`;
 }
 
@@ -558,16 +554,16 @@ function confirmHtml(name) {
   body{margin:0;padding:0;background:#2b2ef5;font-family:Helvetica,Arial,sans-serif;}
   .wrap{max-width:600px;margin:0 auto;background:#2b2ef5;color:#e8e6ff;}
   .hdr{padding:32px 28px 20px;}
-  .hdr h1{font-family:'Inter Tight',Helvetica,Arial,sans-serif;font-size:2.2rem;font-weight:800;text-transform:uppercase;letter-spacing:-0.01em;line-height:1;color:#e8e6ff;margin:0;}
+  .hdr h1{font-size:2.2rem;font-weight:900;text-transform:uppercase;line-height:1;color:#e8e6ff;margin:0;}
   hr{border:none;border-top:1px solid rgba(232,230,255,0.2);margin:0 28px;}
-  .body{padding:24px 28px;font-family:'Satoshi',Helvetica,Arial,sans-serif;font-size:0.9rem;font-style:italic;color:rgba(232,230,255,0.7);line-height:1.7;}
-  .footer{padding:14px 28px;font-family:'Inter Tight',Helvetica,Arial,sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(232,230,255,0.3);}
+  .body{padding:24px 28px;font-size:0.9rem;font-style:italic;color:rgba(232,230,255,0.7);line-height:1.7;}
+  .footer{padding:14px 28px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(232,230,255,0.3);}
 </style></head><body>
 <div class="wrap">
   <div class="hdr"><h1>You're on<br>the list.</h1></div>
   <hr/>
   <div class="body">Hey ${esc(name)} — you'll get a dispatch every time Sean finds or catches something. No spam, just finds.</div>
-  <div class="footer">What Sean Found — Field Dispatch v1.0</div>
+  <div class="footer">Sean Found Something — Field Dispatch v1.0</div>
 </div></body></html>`;
 }
 
@@ -577,3 +573,4 @@ function esc(s) {
 </script>
 </body>
 </html>
+
