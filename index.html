@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Sean Found Something</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:    #2b2ef5;
+  --fg:    #e8e6ff;
+  --dim:   rgba(232,230,255,0.45);
+  --rule:  rgba(232,230,255,0.2);
+  --head:  'Aptos', 'Nunito', sans-serif;
+  --body:  'Aptos', 'Nunito', sans-serif;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+}
+
+/* ── Header ───────────────────────────────── */
+header {
+  padding: 28px 24px 20px;
+}
+
+h1 {
+  font-family: var(--head);
+  font-size: clamp(1.8rem, 8vw, 3rem);
+  font-weight: 800;
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--fg);
+}
+
+.sub {
+  margin-top: 14px;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--dim);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* ── Rule ─────────────────────────────────── */
+hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 20px 24px 0;
+}
+
+/* ── Main ─────────────────────────────────── */
+main {
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ── Upload ───────────────────────────────── */
+.upload-zone {
+  border: 1px solid var(--rule);
+  padding: 48px 20px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.15s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+}
+.upload-zone.tapped {
+  animation: zonePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes zonePop {
+  0%   { transform: scale(1); background: rgba(232,230,255,0); }
+  40%  { transform: scale(0.97); background: rgba(232,230,255,0.1); }
+  100% { transform: scale(1); background: rgba(232,230,255,0); }
+}
+.upload-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.upload-zone p {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+#preview-wrap { display: none; flex-direction: column; gap: 10px; }
+#preview-wrap.active { display: flex; }
+#preview-img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  display: block;
+}
+.btn-text {
+  font-family: var(--body);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Caption ──────────────────────────────── */
+textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--rule);
+  padding: 6px 0 12px;
+  font-family: var(--body);
+  font-size: 0.9rem;
+  color: var(--fg);
+  resize: none;
+  height: 80px;
+  line-height: 1.6;
+  outline: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+textarea::placeholder { color: rgba(232,230,255,0.25); font-style: italic; }
+textarea:focus { border-bottom-color: var(--fg); }
+
+/* ── Send ─────────────────────────────────── */
+.btn-send {
+  width: 100%;
+  background: var(--fg);
+  color: var(--bg);
+  border: none;
+  padding: 18px;
+  font-family: var(--head);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 0;
+  -webkit-appearance: none;
+  position: relative;
+  overflow: hidden;
+}
+.btn-send:disabled { opacity: 0.2; cursor: not-allowed; }
+.btn-send.pop {
+  animation: btnPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes btnPop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+/* ripple */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(43,46,245,0.18);
+  transform: scale(0);
+  animation: rippleAnim 0.5s linear;
+  pointer-events: none;
+}
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+.spinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(43,46,245,0.2);
+  border-top-color: var(--bg);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: none;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#result {
+  display: none;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.8;
+  padding-top: 12px;
+}
+#result.ok  { display: block; color: #a8ffb0; }
+#result.err { display: block; color: #ffaaaa; }
+
+/* ── Subscribe ────────────────────────────── */
+.subscribe-section {
+  padding: 28px 24px 56px;
+  border-top: 1px solid var(--rule);
+}
+
+.sub-title {
+  font-family: var(--head);
+  font-size: clamp(1.3rem, 5vw, 1.8rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--fg);
+  margin-bottom: 10px;
+  letter-spacing: 0.01em;
+}
+
+.sub-desc {
+  font-size: 0.72rem;
+  color: var(--dim);
+  font-style: italic;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.sub-fields { display: flex; flex-direction: column; gap: 2px; }
+.sub-fields input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--rule);
+  padding: 10px 0 12px;
+  font-family: var(--body);
+  font-size: 0.88rem;
+  color: var(--fg);
+  outline: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  transition: border-color 0.2s;
+}
+.sub-fields input:focus { border-bottom-color: var(--fg); }
+.sub-fields input::placeholder { color: rgba(232,230,255,0.25); font-style: italic; }
+
+.btn-sub {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--fg);
+  padding: 16px;
+  font-family: var(--head);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: background 0.15s;
+  border-radius: 0;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+.btn-sub:active:not(:disabled) { background: rgba(232,230,255,0.08); }
+.btn-sub:disabled { opacity: 0.3; }
+.btn-sub.pop {
+  animation: btnPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sub-status {
+  margin-top: 12px;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a8ffb0;
+  display: none;
+  font-style: italic;
+}
+.sub-status.err { color: #ffaaaa; }
+.sub-status.show { display: block; }
+
+/* ── Footer ───────────────────────────────── */
+footer {
+  border-top: 1px solid var(--rule);
+  padding: 16px 24px;
+}
+.footer-text {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Sean Found<br>Something</h1>
+  <p class="sub">a field dispatch of finds and catches</p>
+</header>
+
+<hr/>
+
+<main>
+
+  <div>
+    <div class="upload-zone" id="upload-zone">
+      <input type="file" id="file-input" accept="image/*" capture="environment"/>
+      <p>Tap to upload the photograph of the find</p>
+    </div>
+    <div id="preview-wrap">
+      <img id="preview-img" src="" alt="Catch"/>
+      <button class="btn-text" onclick="resetPhoto()">← retake</button>
+    </div>
+  </div>
+
+  <div>
+    <textarea id="caption" placeholder="what did you find…" rows="3"></textarea>
+  </div>
+
+  <div>
+    <button class="btn-send" id="send-btn" onclick="sendAlert(event)" disabled>
+      <span id="send-label">Send the Alert</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+    <div id="result"></div>
+  </div>
+
+</main>
+
+<div class="subscribe-section">
+  <div class="sub-desc">Leave your email — you'll hear about every find and catch.</div>
+  <div class="sub-fields">
+    <input type="text"  id="sub-name"  placeholder="your name"/>
+    <input type="email" id="sub-email" placeholder="your email"/>
+  </div>
+  <button class="btn-sub" id="sub-btn" onclick="subscribe(event)">Sign Up</button>
+  <div class="sub-status" id="sub-status"></div>
+</div>
+
+<footer>
+  <div class="footer-text">Sean Found Something — field dispatch v1.0</div>
+</footer>
+
+<script>
+const RESEND_KEY   = 're_aDzcoiQN_28ZVfdf3fYM3e6sksrez6hEQ';
+const FROM_ADDRESS = 'onboarding@resend.dev';
+
+const friends = [
+  { name: "Jake", email: "jake@email.com" },
+  { name: "Mike", email: "mike@email.com" },
+  { name: "Dad",  email: "dad@email.com"  },
+];
+
+let imageDataUrl = null;
+
+// ── Upload zone tap animation ──────────────
+const zone = document.getElementById('upload-zone');
+
+zone.addEventListener('click', () => {
+  zone.classList.remove('tapped');
+  void zone.offsetWidth; // reflow to restart animation
+  zone.classList.add('tapped');
+});
+zone.addEventListener('animationend', () => zone.classList.remove('tapped'));
+
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => {
+  e.preventDefault(); zone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) readFile(f);
+});
+document.getElementById('file-input').addEventListener('change', e => {
+  if (e.target.files[0]) readFile(e.target.files[0]);
+});
+
+// ── Ripple helper ──────────────────────────
+function addRipple(btn, e) {
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  const x = (e.clientX || rect.left + rect.width / 2) - rect.left - size / 2;
+  const y = (e.clientY || rect.top + rect.height / 2) - rect.top - size / 2;
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  ripple.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px`;
+  btn.appendChild(ripple);
+  ripple.addEventListener('animationend', () => ripple.remove());
+}
+
+// ── Button pop helper ──────────────────────
+function popBtn(btn) {
+  btn.classList.remove('pop');
+  void btn.offsetWidth;
+  btn.classList.add('pop');
+  btn.addEventListener('animationend', () => btn.classList.remove('pop'), { once: true });
+}
+
+function readFile(file) {
+  const r = new FileReader();
+  r.onload = e => {
+    imageDataUrl = e.target.result;
+    document.getElementById('preview-img').src = imageDataUrl;
+    zone.style.display = 'none';
+    document.getElementById('preview-wrap').classList.add('active');
+    document.getElementById('send-btn').disabled = false;
+  };
+  r.readAsDataURL(file);
+}
+
+function resetPhoto() {
+  imageDataUrl = null;
+  zone.style.display = 'block';
+  document.getElementById('preview-wrap').classList.remove('active');
+  document.getElementById('preview-img').src = '';
+  document.getElementById('file-input').value = '';
+  document.getElementById('send-btn').disabled = true;
+}
+
+async function sendAlert(e) {
+  const sendBtn = document.getElementById('send-btn');
+  popBtn(sendBtn);
+  addRipple(sendBtn, e);
+  const caption = document.getElementById('caption').value.trim();
+  sendBtn.disabled = true;
+  document.getElementById('send-label').textContent = 'Sending…';
+  document.getElementById('spinner').style.display = 'block';
+  document.getElementById('result').className = '';
+
+  const results = await Promise.all(friends.map(async f => {
+    try {
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${RESEND_KEY}` },
+        body: JSON.stringify({
+          from: FROM_ADDRESS,
+          to: f.email,
+          subject: '🎣 Sean found something',
+          html: alertHtml(f.name, caption, imageDataUrl),
+        }),
+      });
+      const d = await res.json();
+      return { f, ok: res.ok, err: d.message || '' };
+    } catch(e) { return { f, ok: false, err: e.message }; }
+  }));
+
+  document.getElementById('send-label').textContent = 'Send the Alert';
+  document.getElementById('spinner').style.display = 'none';
+  sendBtn.disabled = false;
+
+  const ok   = results.filter(r => r.ok);
+  const fail = results.filter(r => !r.ok);
+  const el   = document.getElementById('result');
+
+  if (ok.length) {
+    el.textContent = `Sent to ${ok.map(r => r.f.name).join(', ')}` +
+      (fail.length ? ` — failed: ${fail.map(r => r.f.name).join(', ')}` : '');
+    el.className = 'ok';
+  } else {
+    el.textContent = 'Send failed — check API key';
+    el.className = 'err';
+  }
+}
+
+async function subscribe(e) {
+  const btn    = document.getElementById('sub-btn');
+  popBtn(btn);
+  addRipple(btn, e);
+  const name   = document.getElementById('sub-name').value.trim();
+  const email  = document.getElementById('sub-email').value.trim();
+  const status = document.getElementById('sub-status');
+
+  if (!email || !email.includes('@')) {
+    status.textContent = 'Enter a valid email.';
+    status.className = 'sub-status err show';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  status.className = 'sub-status';
+
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${RESEND_KEY}` },
+      body: JSON.stringify({
+        from: FROM_ADDRESS,
+        to: email,
+        subject: `You're on the list — Sean Found Something`,
+        html: confirmHtml(name || 'Angler'),
+      }),
+    });
+    if (res.ok) {
+      status.textContent = `You're in. Check ${email}.`;
+      status.className = 'sub-status show';
+      document.getElementById('sub-name').value = '';
+      document.getElementById('sub-email').value = '';
+    } else {
+      const d = await res.json();
+      status.textContent = `Error: ${d.message || 'failed'}`;
+      status.className = 'sub-status err show';
+    }
+  } catch(e) {
+    status.textContent = `Error: ${e.message}`;
+    status.className = 'sub-status err show';
+  }
+  btn.disabled = false;
+  btn.textContent = 'Sign Up';
+}
+
+function alertHtml(name, caption, img) {
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+<style>
+  body{margin:0;padding:0;background:#2b2ef5;font-family:Helvetica,Arial,sans-serif;}
+  .wrap{max-width:600px;margin:0 auto;background:#2b2ef5;color:#e8e6ff;}
+  .hdr{padding:32px 28px 20px;}
+  .hdr h1{font-size:2.2rem;font-weight:900;text-transform:uppercase;letter-spacing:-0.01em;line-height:1;color:#e8e6ff;margin:0;}
+  .hdr .to{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(232,230,255,0.45);margin-bottom:10px;}
+  hr{border:none;border-top:1px solid rgba(232,230,255,0.2);margin:0 28px;}
+  .body{padding:24px 28px;}
+  img{width:100%;display:block;margin-bottom:18px;}
+  .caption{font-size:0.95rem;font-style:italic;color:rgba(232,230,255,0.8);line-height:1.6;margin-bottom:18px;}
+  .footer{padding:14px 28px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(232,230,255,0.3);}
+</style></head><body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="to">For: ${esc(name)}</div>
+    <h1>Sean Found Something</h1>
+  </div>
+  <hr/>
+  <div class="body">
+    <img src="${img}" alt="catch"/>
+    <div class="caption">${esc(caption || 'No notes.')}</div>
+  </div>
+  <div class="footer">Sean Found Something — Field Dispatch v1.0</div>
+</div></body></html>`;
+}
+
+function confirmHtml(name) {
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+<style>
+  body{margin:0;padding:0;background:#2b2ef5;font-family:Helvetica,Arial,sans-serif;}
+  .wrap{max-width:600px;margin:0 auto;background:#2b2ef5;color:#e8e6ff;}
+  .hdr{padding:32px 28px 20px;}
+  .hdr h1{font-size:2.2rem;font-weight:900;text-transform:uppercase;line-height:1;color:#e8e6ff;margin:0;}
+  hr{border:none;border-top:1px solid rgba(232,230,255,0.2);margin:0 28px;}
+  .body{padding:24px 28px;font-size:0.9rem;font-style:italic;color:rgba(232,230,255,0.7);line-height:1.7;}
+  .footer{padding:14px 28px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(232,230,255,0.3);}
+</style></head><body>
+<div class="wrap">
+  <div class="hdr"><h1>You're on<br>the list.</h1></div>
+  <hr/>
+  <div class="body">Hey ${esc(name)} — you'll get a dispatch every time Sean finds or catches something. No spam, just finds.</div>
+  <div class="footer">Sean Found Something — Field Dispatch v1.0</div>
+</div></body></html>`;
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
